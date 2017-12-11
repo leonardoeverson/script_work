@@ -7,6 +7,7 @@ error_reporting(E_ALL);
 
 
 //Conexão com o banco de dados
+//$conn = new mysqli("cbsede.dyndns.org:20000","root","","system");
 $conn = new mysqli("localhost","root","","system");
 
 //Charset da conexão
@@ -19,7 +20,8 @@ $op = intval($_GET['op']);
 
 if($op == 1){
 
-	$select = "Select * from item_descricao";	
+	$select = "SELECT *,TIMEDIFF(NOW(), ADDTIME(hora_criacao, tempo_duracao)) AS timer FROM item_descricao WHERE NOW() BETWEEN hora_criacao AND ADDTIME(hora_criacao, tempo_duracao) ";
+
 	$result = $conn->query($select) or die($conn->error);
 	
 	//Retornando os items da consulta
@@ -32,7 +34,6 @@ if($op == 2){
 	$time = str_replace('h', '', $time);
 	$time = str_replace('m', '', $time);
 	$time = $time.':00';
-	$date = new Datetime($time);
 
 	//Inserindo informações no banco de dados a partir de campos da requisição POST
 	$insert1 = 'insert into item_descricao (nome_item, descricao, hora_criacao,tempo_duracao) values ("'.$_POST["nome_item"].'","'.$_POST["description"].'","'.$now.'","'.$time.'")';
