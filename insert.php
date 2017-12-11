@@ -28,9 +28,14 @@ if($op == 1){
 
 if($op == 2){
 	$now =  date('Y-m-d H:i:s');
-	
+	$time = $_POST['time'];
+	$time = str_replace('h', '', $time);
+	$time = str_replace('m', '', $time);
+	$time = $time.':00';
+	$date = new Datetime($time);
+
 	//Inserindo informações no banco de dados a partir de campos da requisição POST
-	$insert1 = 'insert into item_descricao (nome_item, descricao, hora_criacao) values ("'.$_POST["nome_item"].'","'.utf8_decode($_POST["description"]).'","'.$now.'")';
+	$insert1 = 'insert into item_descricao (nome_item, descricao, hora_criacao,tempo_duracao) values ("'.$_POST["nome_item"].'","'.$_POST["description"].'","'.$now.'","'.$time.'")';
 
 	$conn->query($insert1) or die($conn->error);
 
@@ -40,7 +45,14 @@ if($op == 2){
 }
 
 if($op == 3){
-	$insert2 = "Insert into item_descricao values";
+	//Inserindo informações dos lances no banco de dados
+	$insert2 = 'Insert into lance_usuario (item_id, lance_valor, nome_usuario) values('.$_POST['id'].','.$_POST['valor_lance'].',"'.$_POST['nome'].'")';
+
+	//Em caso de falha
+	$conn->query($insert2) or die(json_encode(array('mensagem' => '2','msg_text'=> $conn->error),JSON_UNESCAPED_UNICODE));
+
+	//Em caso de sucesso
+	echo json_encode(array('mensagem' => '1','msg_text' =>'Inserção feita com sucesso!'),JSON_UNESCAPED_UNICODE);
 }
 
 if($op == 4){
