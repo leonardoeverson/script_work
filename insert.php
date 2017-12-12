@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 
 
 //Conexão com o banco de dados
-$conn = new mysqli("cbsede.dyndns.org:20000","root","admin@fw","system");
+$conn = new mysqli("cbsede.dyndns.org:20000","db","admindb#","system");
 //$conn = new mysqli("localhost","root","","system");
 
 //Charset da conexão
