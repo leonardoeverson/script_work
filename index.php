@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -68,6 +69,8 @@ error_reporting(E_ALL);
 
 	<script type="text/javascript">
 		var result = '';
+		element_timers = [];
+		var contador = 0;
 
 		$.ajax({
 			method: "POST",
@@ -76,10 +79,26 @@ error_reporting(E_ALL);
 			result = JSON.parse(msg);
 			console.log(result)
 			for (var i = 0; i < result.length; i++) {
-				$("#container").append("<div class='card' style='width: 20rem;'><img class='card-img-top' src='data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22318%22%20height%3D%22180%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20318%20180%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16046348fb8%20text%20%7B%20fill%3Argba(255%2C255%2C255%2C.75)%3Bfont-weight%3Anormal%3Bfont-family%3AHelvetica%2C%20monospace%3Bfont-size%3A16pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16046348fb8%22%3E%3Crect%20width%3D%22318%22%20height%3D%22180%22%20fill%3D%22%23777%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%22118.01666641235352%22%20y%3D%2297.5%22%3E318x180%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E' alt='Card image cap'><div class='card-body'><h4 class='card-title'>"+ result[i].nome_item+"</h4><p class='card-text'>"+ result[i].descricao +"</p><button type='button' class='btn btn-primary' data-toggle='modal' onclick='show_modal("+i +','+ result[i].id+")' data-id='"+result[i].id +"' >Atribuir Lance</button></div></div>");
+				var tmp_result = result[i].hora_criacao.split(' ');
+
+				$("#container").append("<div class='card' style='width: 30rem;'><div class='card-body'><div class='form-group'><label for='hora_dia'>Hora de Criação</label><input type='text' class='form-control hora_dia' id='hora_dia' name='hora_dia' value="+tmp_result[1]+" disabled></div><div class='form-group'><label for='hora'>Tempo Restante</label><input type='text' class='form-control hora' id='hora' name='hora' disabled value="+result[i].timer.replace('-','')+"></div><h5 class='card-title'>Nome do produto: "+ result[i].nome_item+"</h5><p class='card-text'>Descrição do produto: "+ result[i].descricao +"</p><button type='button' class='btn btn-primary' data-toggle='modal' onclick='show_modal("+i +','+ result[i].id+")' data-id='"+result[i].id +"' >Atribuir Lance</button></div></div>");
 			}
 			//
+
+			var size = document.getElementsByClassName('hora').length;
+			console.log(size)
+			for( i = 0; i < size ; i++){
+				var param1 = $('.hora')[i];
+				var param2 = $('.hora')[i].value;
+
+				element_timers[i] = [param1, param2]; 
+				
+				
+			}
+
+			setInterval(function(){countdown()},1000);
 		});
+
 
 
 
@@ -97,7 +116,7 @@ error_reporting(E_ALL);
 			  modal.find('.modal-body').html('');
 			  modal.find('.modal-title').text('Atribuir lance para o(a) ' + recipient)
 			  modal.find('.modal-body').append("<b>Descrição do item:</b><br>" + result[indice].descricao)
-			  modal.find('.modal-body').append("<br><br><div class='form-group'><label for='valor'><b>Valor do Lance:</b><br></label><input type='text' class='form-control' id='valor' data-id='"+id+"' aria-describedby='emailHelp'></div>");
+			  modal.find('.modal-body').append("<br><div class='form-group'><label for='valor'><b>Valor do Lance:</b><br></label><input type='text' class='form-control' id='valor' data-id='"+id+"' aria-describedby='emailHelp'></div>");
 
 			  modal.find('.modal-body').append("<br><br><div class='form-group'><label for='nome'><b>Nome:</b><br></label><input type='text' class='form-control' id='nome' ></div>");
 
@@ -120,8 +139,8 @@ error_reporting(E_ALL);
 			})
 			.done(function(data_result) {
 				console.log(data_result)
-				var result = JSON.stringify(data_result);
-				alert(result.mensagem)
+				var result = JSON.parse(data_result);
+				alert(result.msg_text);
 			})
 			.fail(function() {
 				console.log("error");
@@ -131,12 +150,68 @@ error_reporting(E_ALL);
 			});
 			
 		}
+
+		function countdown(){
+			//console.log(contador)
+			contador++;
+			var tmp = $('.hora');
+			for(i = 0; i < tmp.length;i++){
+				var times = tmp[i].value.split(":");
+				
+				var hour = Number(times[0]);
+				var minutes = Number(times[1]);
+				var seconds = Number(times[2]);
+				seconds = seconds - 1;	
+
+				if(seconds < 0){
+					seconds = 59;
+				}
+
+				if(seconds == 0){
+					minutes--;
+
+				}
+
+				if(minutes == 0){
+					if(hour > 0){
+						hour--;
+					}
+				}
+
+				if(hour <= 0 && minutes <= 0 && seconds <= 0){
+					location.reload(true)
+				}
+
+				tmp[i].value = hour + ":"+ minutes +":"+ seconds;
+
+
+			}
+
+			if(contador > 100){
+				console.log("atualizando...")
+				location.reload(true);
+				contador = 0;
+			}
+		}
+
+
+
 	</script>
 	<style>
 	.card{
 		margin-top:20px;
 		margin-left:20px;
 		display: -webkit-inline-flex
+	}
+
+	#hora{
+		width:120px;
+		float: right
+	}
+
+	#hora_dia{
+		width:120px;
+		float: right
 	}
 </style>
 </body>

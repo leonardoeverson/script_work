@@ -7,8 +7,8 @@ error_reporting(E_ALL);
 
 
 //Conexão com o banco de dados
-$conn = new mysqli("cbsede.dyndns.org:20000","db","admindb#","system");
-//$conn = new mysqli("localhost","db","admindb#","system");
+//$conn = new mysqli("cbsede.dyndns.org:20000","db","admindb#","system");
+$conn = new mysqli("localhost","db","admindb#","system");
 
 //Charset da conexão
 $conn->set_charset('utf8mb4');
@@ -31,8 +31,7 @@ if($op == 1){
 if($op == 2){
 	$now =  date('Y-m-d H:i:s');
 	$time = $_POST['time'];
-	$time = str_replace('h', '', $time);
-	$time = str_replace('m', '', $time);
+	$time = str_replace(array('h','m'), '', $time);
 	$time = $time.':00';
 
 	//Inserindo informações no banco de dados a partir de campos da requisição POST
@@ -57,5 +56,10 @@ if($op == 3){
 }
 
 if($op == 4){
-	$insert3 = "Insert into item_descricao values";
+	$select2 = "SELECT min(lance_valor) as lance, nome_usuario, item_id, nome_item FROM lance_usuario as c, item_descricao WHERE NOT EXISTS(SELECT * FROM lance_usuario AS a WHERE a.lance_valor = c.lance_valor and a.item_id = c.item_id and a.nome_usuario != c.nome_usuario) AND c.item_id = item_descricao.id AND NOW() > ADDTIME(item_descricao.hora_criacao,item_descricao.tempo_duracao) group by(c.item_id)";
+
+	
+	$result = $conn->query($select2) or die(json_encode(array('mensagem' => '2','msg_text'=> $conn->error),JSON_UNESCAPED_UNICODE));
+
+	echo json_encode($result->fetch_all(MYSQLI_ASSOC),JSON_UNESCAPED_UNICODE);
 }
