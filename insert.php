@@ -7,8 +7,8 @@ error_reporting(E_ALL);
 
 
 //Conexão com o banco de dados
-//$conn = new mysqli("cbsede.dyndns.org:20000","root","","system");
-$conn = new mysqli("localhost","root","","system");
+$conn = new mysqli("cbsede.dyndns.org:20000","root","","system");
+//$conn = new mysqli("localhost","root","","system");
 
 //Charset da conexão
 $conn->set_charset('utf8mb4');
