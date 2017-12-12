@@ -20,7 +20,7 @@ $op = intval($_GET['op']);
 
 if($op == 1){
 
-	$select = "SELECT *,TIMEDIFF(NOW(), ADDTIME(hora_criacao, tempo_duracao)) AS timer FROM item_descricao WHERE NOW() BETWEEN hora_criacao AND ADDTIME(hora_criacao, tempo_duracao) ";
+	$select = "SELECT *,TIMEDIFF(NOW(), ADDTIME(hora_criacao, tempo_duracao)) AS timer FROM item_descricao WHERE NOW() BETWEEN hora_criacao AND ADDTIME(hora_criacao, tempo_duracao) limit 1 ";
 
 	$result = $conn->query($select) or die($conn->error);
 	
@@ -33,6 +33,19 @@ if($op == 2){
 	$time = $_POST['time'];
 	$time = str_replace(array('h','m'), '', $time);
 	$time = $time.':00';
+
+	$tempo_result = $conn->query("SELECT addtime(hora_criacao,tempo_duracao) as tempo FROM item_descricao ORDER BY id DESC LIMIT 1");
+	$tempo_criacao = $tempo_result->fetch_assoc();
+	
+	// var_dump($tempo_criacao);
+	// die();
+	
+	if(($now) < strtotime($tempo_criacao['tempo'])){
+		$now = $tempo_criacao['tempo'];
+		//var_dump($now);
+	}
+
+	//die();
 
 	//Inserindo informações no banco de dados a partir de campos da requisição POST
 	$insert1 = 'insert into item_descricao (nome_item, descricao, hora_criacao,tempo_duracao) values ("'.$_POST["nome_item"].'","'.$_POST["description"].'","'.$now.'","'.$time.'")';

@@ -35,15 +35,15 @@
 		<form action="insert.php?op=2" method="post">
 		  <div class="form-group" >
 		    <label for="nome_item">Nome do Item</label>
-		    <input type="text" class="form-control" id="nome_item" name="nome_item" aria-describedby="emailHelp">		
+		    <input type="text" class="form-control" id="nome_item" name="nome_item" aria-describedby="emailHelp" required>		
 		  </div>
 		  <div class="form-group">
 		    <label for="description">Descrição</label>
-		    <input type="text" class="form-control" id="description" name="description">
+		    <input type="text" class="form-control" id="description" name="description" required>
 		  </div>
 		  <div class="form-group">
 		    <label for="time">Tempo de Duração</label>
-		    <input type="text" class="form-control" id="time" name="time" >
+		    <input type="text" class="form-control" id="time" name="time" required >
 		  </div>
 		  <button type="submit" class="btn btn-primary">Cadastro</button>
 		</form>

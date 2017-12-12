@@ -48,7 +48,7 @@ error_reporting(E_ALL);
 		  <div class="modal-dialog" role="document">
 		    <div class="modal-content">
 		      <div class="modal-header">
-		        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+		        <h5 class="modal-title" id="exampleModalLongTitle">Modal</h5>
 		        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 		          <span aria-hidden="true">&times;</span>
 		        </button>
@@ -81,7 +81,7 @@ error_reporting(E_ALL);
 			for (var i = 0; i < result.length; i++) {
 				var tmp_result = result[i].hora_criacao.split(' ');
 
-				$("#container").append("<div class='card' style='width: 30rem;'><div class='card-body'><div class='form-group'><label for='hora_dia'>Hora de Criação</label><input type='text' class='form-control hora_dia' id='hora_dia' name='hora_dia' value="+tmp_result[1]+" disabled></div><div class='form-group'><label for='hora'>Tempo Restante</label><input type='text' class='form-control hora' id='hora' name='hora' disabled value="+result[i].timer.replace('-','')+"></div><h5 class='card-title'>Nome do produto: "+ result[i].nome_item+"</h5><p class='card-text'>Descrição do produto: "+ result[i].descricao +"</p><button type='button' class='btn btn-primary' data-toggle='modal' onclick='show_modal("+i +','+ result[i].id+")' data-id='"+result[i].id +"' >Atribuir Lance</button></div></div>");
+				$("#container").append("<div class='card' style='width: 40rem;'><div class='card-body'><div class='form-group'><label for='hora_dia'>Início</label><input type='text' class='form-control hora_dia' id='hora_dia' name='hora_dia' value="+tmp_result[1]+" disabled></div><div class='form-group'><label for='hora'>Tempo Restante</label><input type='text' class='form-control hora' id='hora' name='hora' disabled value="+result[i].timer.replace('-','')+"></div><h5 class='card-title'>Nome do produto: "+ result[i].nome_item+"</h5><p class='card-text'>Descrição do produto: "+ result[i].descricao +"</p><button type='button' class='btn btn-primary' data-toggle='modal' onclick='show_modal("+i +','+ result[i].id+")' data-id='"+result[i].id +"' >Enviar Lance</button></div></div>");
 			}
 			//
 
@@ -116,9 +116,9 @@ error_reporting(E_ALL);
 			  modal.find('.modal-body').html('');
 			  modal.find('.modal-title').text('Atribuir lance para o(a) ' + recipient)
 			  modal.find('.modal-body').append("<b>Descrição do item:</b><br>" + result[indice].descricao)
-			  modal.find('.modal-body').append("<br><div class='form-group'><label for='valor'><b>Valor do Lance:</b><br></label><input type='text' class='form-control' id='valor' data-id='"+id+"' aria-describedby='emailHelp'></div>");
+			  modal.find('.modal-body').append("<br><div class='form-group'><label for='valor'><b>Valor do Lance:</b><br></label><input type='text' class='form-control' id='valor' data-id='"+id+"' required aria-describedby='emailHelp'></div>");
 
-			  modal.find('.modal-body').append("<br><br><div class='form-group'><label for='nome'><b>Nome:</b><br></label><input type='text' class='form-control' id='nome' ></div>");
+			  modal.find('.modal-body').append("<br><div class='form-group'><label for='nome'><b>Nome:</b><br></label><input type='text' required class='form-control' id='nome' ></div>");
 
 			  modal.find('#valor').text('');
 			  //modal.find('.modal-body input').val(recipient)
@@ -130,6 +130,11 @@ error_reporting(E_ALL);
 		}
 
 		function enviar_lance(param, id, nome){
+			if(param.trim() == '' || nome.trim() == ''){
+				alert('Dados vazios');
+				return
+			}
+
 			$('#exampleModalLabel').modal('hide');
 			$.ajax({
 				url: 'insert.php?op=3',
