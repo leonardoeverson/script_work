@@ -69,9 +69,10 @@ error_reporting(E_ALL);
 
 	<script type="text/javascript">
 		var result = '';
-		element_timers = [];
+		//element_timers = [];
 		var contador = 0;
 
+		//Obtem lances ativos e insere na tela
 		$.ajax({
 			method: "POST",
 			url: "insert.php?op=1"
@@ -87,21 +88,21 @@ error_reporting(E_ALL);
 
 			var size = document.getElementsByClassName('hora').length;
 			console.log(size)
-			for( i = 0; i < size ; i++){
-				var param1 = $('.hora')[i];
-				var param2 = $('.hora')[i].value;
+			// for( i = 0; i < size ; i++){
+			// 	var param1 = $('.hora')[i];
+			// 	var param2 = $('.hora')[i].value;
 
-				element_timers[i] = [param1, param2]; 
+			// 	element_timers[i] = [param1, param2]; 
 				
 				
-			}
+			// }
 
 			setInterval(function(){countdown()},1000);
 		});
 
 
 
-
+		//Mostra o modal com os lances selecionados
 		function show_modal(indice, id){
 			indice = Number(indice)
 			//console.log(nome_item)
@@ -129,6 +130,7 @@ error_reporting(E_ALL);
 
 		}
 
+		//Envia dados para o servidor quando o usuário envia em lance
 		function enviar_lance(param, id, nome){
 			if(param.trim() == '' || nome.trim() == ''){
 				alert('Dados vazios');
@@ -156,6 +158,7 @@ error_reporting(E_ALL);
 			
 		}
 
+		//Contador de tempo 
 		function countdown(){
 			//console.log(contador)
 			contador++;
@@ -184,7 +187,7 @@ error_reporting(E_ALL);
 				}
 
 				if(hour <= 0 && minutes <= 0 && seconds <= 0){
-					location.reload(true)
+					location.reload(false)
 				}
 
 				tmp[i].value = hour + ":"+ minutes +":"+ seconds;
@@ -194,7 +197,7 @@ error_reporting(E_ALL);
 
 			if(contador > 100){
 				console.log("atualizando...")
-				location.reload(true);
+				location.reload(false);
 				contador = 0;
 			}
 		}
