@@ -40,9 +40,10 @@ if($op == 2){
 	// var_dump($tempo_criacao);
 	// die();
 	
-	if(($now) < strtotime($tempo_criacao['tempo'])){
-		$now = $tempo_criacao['tempo'];
-		//var_dump($now);
+	if(strtotime($now) < strtotime($tempo_criacao['tempo'])){
+		$now = $tempo_criacao['tempo'];		
+	}else{
+		$now =  date('Y-m-d H:i:s');
 	}
 
 	//die();
