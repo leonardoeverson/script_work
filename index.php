@@ -38,6 +38,9 @@ error_reporting(E_ALL);
 				<li class="nav-item">
 					<a class="nav-link" href="cadastro.php">Cadastro Item</a>
 				</li>
+				<li class="nav-item">
+		      <a class="nav-link" href="https://github.com/firebird-t/script_work">Github</a>
+		    </li>
 			</ul>
 		</div>
 	</nav>
